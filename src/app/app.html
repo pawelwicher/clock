@@ -1,7 +1,7 @@
 <div class="page">
   <header class="header">
     <h1>Która godzina?</h1>
-    <p class="lead">Odczytaj wskazanie zegara i wpisz godzinę oraz minuty.</p>
+    <p class="lead">Odczytaj wskazanie zegara i wybierz godzinę oraz minuty.</p>
   </header>
 
   <section class="levels" aria-label="Poziom trudności">
@@ -19,55 +19,108 @@
     }
   </section>
 
+  <section class="dials" aria-label="Cyfry na tarczy">
+    <span class="dials-label">Tarcza</span>
+    @for (item of dials; track item.id) {
+      <button
+        type="button"
+        class="dial-option"
+        [class.active]="dial() === item.id"
+        [attr.aria-pressed]="dial() === item.id"
+        [attr.title]="item.title"
+        (click)="setDial(item.id)"
+      >
+        {{ item.label }}
+      </button>
+    }
+  </section>
+
   <main class="card">
     <div class="clock-wrap">
-      <app-clock-face [hour]="hour()" [minute]="minute()" />
+      <app-clock-face [hour]="hour()" [minute]="minute()" [dial]="dial()" />
     </div>
 
-    <form class="answer" (submit)="$event.preventDefault(); submit()">
-      <div class="fields">
-        <label class="field">
-          <span class="field-label">Godzina</span>
-          <input
-            #hourField
-            type="number"
-            inputmode="numeric"
-            min="1"
-            max="12"
-            step="1"
-            placeholder="--"
-            autocomplete="off"
-            [disabled]="answered()"
-            [value]="hourAnswer()"
-            (input)="onHourInput($any($event.target).value)"
-            aria-label="Godzina od 1 do 12"
-          />
-        </label>
-
-        <span class="colon" aria-hidden="true">:</span>
-
-        <label class="field">
-          <span class="field-label">Minuty</span>
-          <input
-            type="number"
-            inputmode="numeric"
-            min="0"
-            max="59"
-            step="1"
-            placeholder="--"
-            autocomplete="off"
-            [disabled]="answered()"
-            [value]="minuteAnswer()"
-            (input)="onMinuteInput($any($event.target).value)"
-            aria-label="Minuty od 0 do 59"
-          />
-        </label>
-      </div>
-
-      <button type="submit" class="primary">
-        {{ answered() ? 'Następny zegar' : 'Sprawdź' }}
+    <div class="fields" role="group" aria-label="Twoja odpowiedź">
+      <button
+        type="button"
+        class="field"
+        [class.active]="activeField() === 'hour' && !answered()"
+        [class.filled]="hourAnswer() !== ''"
+        [disabled]="answered()"
+        (click)="setActiveField('hour')"
+      >
+        <span class="field-label">Godzina</span>
+        <span class="field-value">{{ hourAnswer() || '–' }}</span>
       </button>
-    </form>
+
+      <span class="colon" aria-hidden="true">:</span>
+
+      <button
+        type="button"
+        class="field"
+        [class.active]="activeField() === 'minute' && !answered()"
+        [class.filled]="minuteAnswer() !== ''"
+        [disabled]="answered()"
+        (click)="setActiveField('minute')"
+      >
+        <span class="field-label">Minuty</span>
+        <span class="field-value">{{ minuteAnswer() || '–' }}</span>
+      </button>
+    </div>
+
+    @if (!answered()) {
+      @if (activeField() === 'hour') {
+        <div class="pad hours" role="group" aria-label="Wybierz godzinę">
+          @for (value of hourOptions; track value) {
+            <button
+              type="button"
+              class="key"
+              [class.chosen]="hourAnswer() === value"
+              (click)="pickHour(value)"
+            >
+              {{ value }}
+            </button>
+          }
+        </div>
+      } @else if (minuteOptions().length > 0) {
+        <div
+          class="pad minutes"
+          [class.few]="minuteOptions().length <= 4"
+          role="group"
+          aria-label="Wybierz minuty"
+        >
+          @for (value of minuteOptions(); track value) {
+            <button
+              type="button"
+              class="key"
+              [class.chosen]="minuteAnswer() === value"
+              (click)="pickMinute(value)"
+            >
+              {{ value }}
+            </button>
+          }
+        </div>
+      } @else {
+        <div class="pad digits" role="group" aria-label="Wystukaj minuty">
+          @for (digit of keypad; track digit) {
+            <button type="button" class="key" (click)="pressDigit(digit)">{{ digit }}</button>
+          }
+          <button
+            type="button"
+            class="key wide"
+            (click)="pressBackspace()"
+            [disabled]="minuteAnswer() === ''"
+            aria-label="Skasuj ostatnią cyfrę"
+          >
+            ⌫
+          </button>
+        </div>
+      }
+    }
+
+    <button type="button" class="primary" (click)="submit()">
+      {{ answered() ? 'Następny zegar' : 'Sprawdź' }}
+    </button>
 
     <p
       class="verdict"
@@ -78,7 +131,7 @@
       [class.hint]="verdict()?.ok === null"
       [class.empty]="!verdict()"
     >
-      {{ verdict()?.text ?? 'Wpisz odpowiedź i naciśnij „Sprawdź”.' }}
+      {{ verdict()?.text ?? 'Wybierz odpowiedź i naciśnij „Sprawdź”.' }}
     </p>
   </main>
 

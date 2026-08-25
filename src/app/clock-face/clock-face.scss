@@ -32,6 +32,20 @@
   font-weight: 600;
   text-anchor: middle;
   dominant-baseline: central;
+
+  .mode-both & {
+    font-size: 15px;
+  }
+}
+
+.minute-numeral {
+  fill: var(--hand-minute);
+  font-family: inherit;
+  font-size: 10px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  text-anchor: middle;
+  dominant-baseline: central;
 }
 
 .hand {

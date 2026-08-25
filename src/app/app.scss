@@ -63,6 +63,43 @@
   color: var(--muted);
 }
 
+.dials {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-top: -0.35rem;
+}
+
+.dials-label {
+  padding-right: 0.15rem;
+  font-size: 0.7rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.dial-option {
+  flex: 1;
+  padding: 0.35rem 0.4rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--bg-soft);
+  color: var(--muted);
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
+
+  &.active {
+    background: var(--accent-soft);
+    border-color: var(--accent);
+    color: var(--text);
+    font-weight: 600;
+  }
+}
+
 .card {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -70,68 +107,122 @@
   padding: clamp(1rem, 4vw, 1.5rem);
   display: flex;
   flex-direction: column;
-  gap: 1.15rem;
+  gap: 0.9rem;
 }
 
 .clock-wrap {
-  width: min(19rem, 72vw);
+  width: min(19rem, 66vw);
   margin: 0 auto;
-}
-
-.answer {
-  display: flex;
-  flex-direction: column;
-  gap: 0.9rem;
 }
 
 .fields {
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: center;
-  gap: 0.5rem;
+  gap: 0.4rem;
 }
 
 .field {
+  flex: 1;
+  max-width: 9rem;
   display: flex;
   flex-direction: column;
-  gap: 0.3rem;
+  align-items: center;
+  gap: 0.1rem;
+  padding: 0.4rem 0.5rem 0.5rem;
+  border: 2px solid var(--border);
+  border-radius: 0.9rem;
+  background: var(--bg-soft);
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease;
 
-  input {
-    width: 4.5rem;
-    padding: 0.6rem 0.35rem;
-    border: 1px solid var(--border);
-    border-radius: 0.75rem;
-    background: var(--bg-soft);
-    font-size: 1.6rem;
-    font-variant-numeric: tabular-nums;
-    text-align: center;
-    -moz-appearance: textfield;
-    appearance: textfield;
+  &.active {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+  }
 
-    &::-webkit-outer-spin-button,
-    &::-webkit-inner-spin-button {
-      margin: 0;
-      -webkit-appearance: none;
-    }
-
-    &:disabled {
-      opacity: 0.7;
-    }
+  &:disabled {
+    cursor: default;
+    opacity: 0.75;
   }
 }
 
 .field-label {
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   color: var(--muted);
-  text-align: center;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
 
+.field-value {
+  font-size: 1.9rem;
+  line-height: 1.1;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--muted);
+
+  .field.filled & {
+    color: var(--text);
+  }
+}
+
 .colon {
-  padding-bottom: 0.7rem;
   font-size: 1.6rem;
   color: var(--muted);
+}
+
+.pad {
+  display: grid;
+  gap: 0.4rem;
+  align-content: start;
+  /* Wysokość dwóch rzędów — „Sprawdź” nie skacze przy zmianie zestawu klawiszy. */
+  min-height: calc(2 * 2.9rem + 0.4rem);
+
+  &.hours,
+  &.minutes,
+  &.digits {
+    grid-template-columns: repeat(6, 1fr);
+  }
+
+  &.minutes.few {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.key {
+  min-height: 2.9rem;
+  padding: 0.35rem 0.15rem;
+  border: 1px solid var(--border);
+  border-radius: 0.7rem;
+  background: var(--bg-soft);
+  font-size: 1.15rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  transition:
+    background 0.12s ease,
+    border-color 0.12s ease;
+
+  &.wide {
+    grid-column: span 2;
+  }
+
+  &.chosen {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--surface);
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: default;
+  }
 }
 
 .primary {
@@ -240,5 +331,54 @@
 @media (min-width: 30rem) {
   .levels {
     grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Niskie ekrany telefonów — zegar i klawisze mają się zmieścić razem. */
+@media (max-height: 46rem) {
+  .page {
+    gap: 0.6rem;
+    padding-bottom: 1.25rem;
+  }
+
+  .lead {
+    display: none;
+  }
+
+  .levels {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.35rem;
+  }
+
+  .level {
+    padding: 0.4rem 0.35rem;
+  }
+
+  .level-label {
+    font-size: 0.72rem;
+  }
+
+  .level-hint {
+    display: none;
+  }
+
+  .card {
+    gap: 0.7rem;
+  }
+
+  .clock-wrap {
+    width: min(16rem, 58vw);
+  }
+
+  .field-value {
+    font-size: 1.6rem;
+  }
+
+  .key {
+    min-height: 2.6rem;
+  }
+
+  .pad {
+    min-height: calc(2 * 2.6rem + 0.4rem);
   }
 }
