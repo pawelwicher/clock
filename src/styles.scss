@@ -1,0 +1,83 @@
+:root {
+  color-scheme: light dark;
+
+  --bg: #f2efe9;
+  --bg-soft: #e8e3da;
+  --surface: #fbf9f5;
+  --border: #ddd6ca;
+  --text: #33302b;
+  --muted: #7d756a;
+  --accent: #4d6b63;
+  --accent-soft: #dfe8e4;
+  --good: #3f7355;
+  --good-soft: #e0ece3;
+  --bad: #9c574e;
+  --bad-soft: #f2e2df;
+
+  --dial: #fbf9f5;
+  --dial-ring: #cdc4b5;
+  --tick: #bdb3a4;
+  --tick-major: #8b8275;
+  --hand-hour: #3b423f;
+  --hand-minute: #4d6b63;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1b1d1c;
+    --bg-soft: #232624;
+    --surface: #23262a;
+    --border: #343835;
+    --text: #e6e2da;
+    --muted: #9c968b;
+    --accent: #8bb3a5;
+    --accent-soft: #2b3733;
+    --good: #7fb392;
+    --good-soft: #26332b;
+    --bad: #d59288;
+    --bad-soft: #382a28;
+
+    --dial: #23262a;
+    --dial-ring: #454a48;
+    --tick: #5a615d;
+    --tick-major: #8f978f;
+    --hand-hour: #e6e2da;
+    --hand-minute: #8bb3a5;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family:
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    Roboto,
+    'Helvetica Neue',
+    sans-serif;
+  line-height: 1.5;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button,
+input {
+  font: inherit;
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}

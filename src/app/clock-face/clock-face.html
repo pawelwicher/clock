@@ -1,0 +1,28 @@
+<svg viewBox="0 0 200 200" class="face" role="img" aria-label="Zegar analogowy do odczytania">
+  <circle class="dial" cx="100" cy="100" r="96" />
+
+  @for (tick of ticks(); track $index) {
+    <line
+      [class.major]="tick.major"
+      class="tick"
+      [attr.x1]="tick.x1"
+      [attr.y1]="tick.y1"
+      [attr.x2]="tick.x2"
+      [attr.y2]="tick.y2"
+    />
+  }
+
+  @for (numeral of numerals(); track numeral.label) {
+    <text class="numeral" [attr.x]="numeral.x" [attr.y]="numeral.y">{{ numeral.label }}</text>
+  }
+
+  <g [attr.transform]="'rotate(' + hourAngle() + ' 100 100)'">
+    <line class="hand hour" x1="100" y1="112" x2="100" y2="48" />
+  </g>
+
+  <g [attr.transform]="'rotate(' + minuteAngle() + ' 100 100)'">
+    <line class="hand minute" x1="100" y1="116" x2="100" y2="26" />
+  </g>
+
+  <circle class="pin" cx="100" cy="100" r="5" />
+</svg>

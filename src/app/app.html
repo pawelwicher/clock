@@ -1,0 +1,106 @@
+<div class="page">
+  <header class="header">
+    <h1>Która godzina?</h1>
+    <p class="lead">Odczytaj wskazanie zegara i wpisz godzinę oraz minuty.</p>
+  </header>
+
+  <section class="levels" aria-label="Poziom trudności">
+    @for (item of levels; track item.id) {
+      <button
+        type="button"
+        class="level"
+        [class.active]="level() === item.id"
+        [attr.aria-pressed]="level() === item.id"
+        (click)="setLevel(item.id)"
+      >
+        <span class="level-label">{{ item.label }}</span>
+        <span class="level-hint">{{ item.hint }}</span>
+      </button>
+    }
+  </section>
+
+  <main class="card">
+    <div class="clock-wrap">
+      <app-clock-face [hour]="hour()" [minute]="minute()" />
+    </div>
+
+    <form class="answer" (submit)="$event.preventDefault(); submit()">
+      <div class="fields">
+        <label class="field">
+          <span class="field-label">Godzina</span>
+          <input
+            #hourField
+            type="number"
+            inputmode="numeric"
+            min="1"
+            max="12"
+            step="1"
+            placeholder="--"
+            autocomplete="off"
+            [disabled]="answered()"
+            [value]="hourAnswer()"
+            (input)="onHourInput($any($event.target).value)"
+            aria-label="Godzina od 1 do 12"
+          />
+        </label>
+
+        <span class="colon" aria-hidden="true">:</span>
+
+        <label class="field">
+          <span class="field-label">Minuty</span>
+          <input
+            type="number"
+            inputmode="numeric"
+            min="0"
+            max="59"
+            step="1"
+            placeholder="--"
+            autocomplete="off"
+            [disabled]="answered()"
+            [value]="minuteAnswer()"
+            (input)="onMinuteInput($any($event.target).value)"
+            aria-label="Minuty od 0 do 59"
+          />
+        </label>
+      </div>
+
+      <button type="submit" class="primary">
+        {{ answered() ? 'Następny zegar' : 'Sprawdź' }}
+      </button>
+    </form>
+
+    <p
+      class="verdict"
+      role="status"
+      aria-live="polite"
+      [class.ok]="verdict()?.ok === true"
+      [class.bad]="verdict()?.ok === false"
+      [class.hint]="verdict()?.ok === null"
+      [class.empty]="!verdict()"
+    >
+      {{ verdict()?.text ?? 'Wpisz odpowiedź i naciśnij „Sprawdź”.' }}
+    </p>
+  </main>
+
+  <section class="score" aria-label="Wynik w tej sesji">
+    <div class="score-item good">
+      <span class="score-value">{{ correct() }}</span>
+      <span class="score-label">dobrze</span>
+    </div>
+    <div class="score-item bad">
+      <span class="score-value">{{ wrong() }}</span>
+      <span class="score-label">źle</span>
+    </div>
+    <div class="score-item">
+      <span class="score-value">{{ accuracy() }}%</span>
+      <span class="score-label">skuteczność</span>
+    </div>
+    <button type="button" class="ghost" (click)="resetScore()" [disabled]="total() === 0">
+      Wyzeruj
+    </button>
+  </section>
+
+  <footer class="footer">
+    Wynik liczy się tylko w tej sesji — odświeżenie strony zaczyna od zera.
+  </footer>
+</div>

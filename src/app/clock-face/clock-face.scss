@@ -1,0 +1,56 @@
+:host {
+  display: block;
+}
+
+.face {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.dial {
+  fill: var(--dial);
+  stroke: var(--dial-ring);
+  stroke-width: 4;
+}
+
+.tick {
+  stroke: var(--tick);
+  stroke-width: 1.2;
+  stroke-linecap: round;
+
+  &.major {
+    stroke: var(--tick-major);
+    stroke-width: 3;
+  }
+}
+
+.numeral {
+  fill: var(--text);
+  font-family: inherit;
+  font-size: 18px;
+  font-weight: 600;
+  text-anchor: middle;
+  dominant-baseline: central;
+}
+
+.hand {
+  stroke-linecap: round;
+  transition: none;
+}
+
+.hour {
+  stroke: var(--hand-hour);
+  stroke-width: 7;
+}
+
+.minute {
+  stroke: var(--hand-minute);
+  stroke-width: 4.5;
+}
+
+.pin {
+  fill: var(--hand-hour);
+  stroke: var(--dial);
+  stroke-width: 2;
+}
